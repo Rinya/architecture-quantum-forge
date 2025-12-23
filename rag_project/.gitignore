@@ -1,0 +1,57 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+
+# Virtual Environment
+venv/
+env/
+ENV/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Logs
+*.log
+
+# Temporary files
+*.tmp
+*.temp
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Models (large files)
+models/*/pytorch_model.bin
+models/*/model.safetensors
+models/*/*.bin
+models/*/*.pt
+models/*/*.pth
+
+# Data (potentially large)
+data/embeddings.json
+
+# Index files (generated)
+models/*_index.bin
+models/*_metadata.json

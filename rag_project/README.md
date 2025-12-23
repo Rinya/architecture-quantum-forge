@@ -51,16 +51,27 @@ python utils/prepare_data.py --batch-size 8
 python main.py
 ```
 
-### 3. Интерактивный поиск
-Введите запросы для поиска по документам или используйте команды:
+### 3. Интерактивный RAG с Few-shot prompting
+```bash
+python rag_system.py
+```
+Доступные команды:
 - `search <запрос>` - поиск документов
-- `stats` - статистика по документам
+- `answer <запрос>` - генерация ответа с Few-shot prompting
+- `answer_detailed <запрос>` - детальный ответ с метаданными
+- `answer_cot <запрос>` - ответ с Chain-of-Thought рассуждениями
+- `context <запрос>` - построение контекста для LLM
+- `stats` - статистика системы
 - `help` - справка
 - `quit` - выход
 
-### 4. Быстрый тест поиска
+### 4. Быстрые тесты
 ```bash
+# Тест поиска
 python test_search.py
+
+# Тест Few-shot prompting
+python test_fewshot.py
 ```
 
 ---
@@ -85,12 +96,21 @@ python test_search.py
 - **Оптимизированный поиск**: `np.argpartition()` для top-k
 - **Матричные операции**: Векторизованное косинусное сходство
 
+### ✅ Few-shot prompting & Chain-of-Thought
+- **FewShotPromptGenerator**: Базовые примеры из предметной области с CoT рассуждениями
+- **ContextualPromptGenerator**: Адаптивный выбор релевантных примеров + CoT методы
+- **Chain-of-Thought**: Пошаговые рассуждения в формате "1. Сначала найду... 2. В тексте указано... 3. Следовательно..."
+- **Примеры из фольклора**: "Кто такой Алпамыш?", "Что такое эпос?" с CoT структурой
+- **Детекция типа вопросов**: who/what/where/when/how/why
+- **Интеграция с RAG**: Автоматическое построение промптов с контекстом и рассуждениями
+
 ### ✅ Полный пайплайн
 1. **Загрузка** chunks.json
 2. **Генерация эмбеддингов** с локальной моделью
 3. **Создание FAISS индекса**
 4. **Семантический поиск**
-5. **Интерактивный интерфейс**
+5. **Few-shot prompting** с примерами из предметной области
+6. **Интерактивный интерфейс**
 
 ---
 
@@ -132,6 +152,28 @@ from config import EMBEDDING_MODEL
 # Локальная модель загружается автоматически
 embedder = EmbeddingGenerator(EMBEDDING_MODEL)
 embeddings = embedder.generate_embeddings(["текст 1", "текст 2"])
+```
+
+### Few-shot prompting & Chain-of-Thought:
+```python
+from rag_system import RAGSystem
+
+# Инициализация с адаптивным prompting
+rag = RAGSystem(use_adaptive_prompting=True)
+rag.initialize_from_chunks_file()
+
+# Генерация ответа с Few-shot примерами
+answer_prompt = rag.generate_answer("Кто такой Алпамыш?")
+print(answer_prompt)
+
+# Chain-of-Thought рассуждение
+cot_prompt = rag.generate_cot_answer("Кто такой Алпамыш?")
+print(cot_prompt)
+
+# Детальная информация с метаданными
+detailed = rag.generate_structured_answer("народный эпос")
+print(f"Тип запроса: {detailed['query_type']}")
+print(f"Уверенность: {detailed['confidence']:.3f}")
 ```
 
 ### Оптимизированные numpy операции:
@@ -242,6 +284,7 @@ pip install -r requirements.txt
 - **Полнофункциональная RAG система** с локальной моделью
 - **FAISS индекс** для быстрого векторного поиска
 - **4579 эмбеддингов** для 35 документов
+- **Few-shot prompting + Chain-of-Thought** с адаптивным выбором примеров
 - **Интерактивный интерфейс** для тестирования
 - **Оптимизированные numpy операции** (ускорение 30-200%)
 - **Модульная архитектура** готовая к расширению
@@ -250,6 +293,8 @@ pip install -r requirements.txt
 - Генерация эмбеддингов с локальной моделью ✅
 - Создание и сохранение FAISS индекса ✅
 - Семантический поиск по русскоязычным текстам ✅
+- Few-shot prompting с примерами из предметной области ✅
+- Chain-of-Thought рассуждения с пошаговой логикой ✅
 - Интерактивная работа с системой ✅
 - Поиск по запросу "Кто такой Алпамыш" ✅
 
