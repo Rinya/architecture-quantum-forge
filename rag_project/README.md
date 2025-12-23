@@ -30,7 +30,11 @@ rag_project/
 ├── 📄 main.py                  # 🎯 ОСНОВНОЙ ВХОДНОЙ ФАЙЛ
 ├── 📄 rag_system.py            # Полный интерфейс RAG системы
 ├── 📄 requirements.txt         # Зависимости Python
-├── 📄 test_search.py           # Тест поиска (создан при оптимизации)
+├── 📁 tests/                    # Тестовые модули
+│   ├── __init__.py
+│   ├── README.md               # Документация тестов
+│   ├── test_api.py             # REST API тесты
+│   └── test_fewshot.py         # Few-shot промптинг тесты
 ├── 📄 check_alpamysh.py        # Проверка результатов поиска
 └── 📄 debug_search.py          # Отладка поиска
 ```
@@ -67,11 +71,11 @@ python rag_system.py
 
 ### 4. Быстрые тесты
 ```bash
-# Тест поиска
-python test_search.py
+# Тест API
+python tests/test_api.py
 
 # Тест Few-shot prompting
-python test_fewshot.py
+python tests/test_fewshot.py
 ```
 
 ---
